@@ -4,8 +4,15 @@ namespace App\Models;
 
 use Ramsey\Collection\Collection;
 
-class RequestParser
+class ParsedGameBoard
 {
+
+    public int $height;
+    public int $width;
+    public array $food;
+    public array $hazards;
+    public array $snakes;
+
     public $data;
 
     public function __construct(string $data)

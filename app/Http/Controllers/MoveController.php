@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\RequestParser;
+use App\Models\ParsedGameBoard;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Psr\Log\LoggerInterface;
@@ -26,7 +26,7 @@ class MoveController extends Controller
         ]);
 
 
-        $parser = new RequestParser($request->getContent());
+        $parser = new ParsedGameBoard($request->getContent());
 
         $board = $parser->getBoard();
 
