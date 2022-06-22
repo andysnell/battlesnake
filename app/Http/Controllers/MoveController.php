@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RequestParser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Psr\Log\LoggerInterface;
@@ -23,6 +24,11 @@ class MoveController extends Controller
             'board' => $request->input('board'),
             'you' => $request->input('you'),
         ]);
+
+
+        $parser = new RequestParser($request->getContent());
+
+        $board = $parser->getBoard();
 
         return new JsonResponse(['move' => 'up']);
     }
