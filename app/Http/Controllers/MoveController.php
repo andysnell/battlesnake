@@ -12,15 +12,12 @@ class MoveController extends Controller
 
     public function __construct(LoggerInterface $logger)
     {
-
         $this->logger = $logger;
     }
 
     public function __invoke(Request $request): JsonResponse
     {
-        $this->logger->info('payload', [
-            'request' => $request->toArray()
-        ]);
+        $this->logger->info('moving', ['request' => $request->toArray()]);
 
         return new JsonResponse(['move' => 'up']);
     }
