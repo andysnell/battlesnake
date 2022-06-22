@@ -10,7 +10,7 @@ class MoveController extends Controller
     public function __invoke(Request $request): JsonResponse
     {
         logger()->debug('payload', [
-            'request' => $request->json()
+            'request' => $request->toArray()
         ]);
 
         return new JsonResponse(['move' => 'up']);
