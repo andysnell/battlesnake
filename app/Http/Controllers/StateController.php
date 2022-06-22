@@ -9,6 +9,15 @@ class StateController extends Controller
 {
     public function __invoke(Request $request): JsonResponse
     {
-        return new JsonResponse(['controller' => 'state']);
+        return JsonResponse::fromJsonString(<<<'EOF'
+        {
+          "apiversion": "1",
+          "author": "andysnell",
+          "color": "#888888",
+          "head": "default",
+          "tail": "default",
+          "version": "0.0.1-beta"
+        }
+        EOF);
     }
 }
