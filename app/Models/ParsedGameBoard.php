@@ -25,6 +25,7 @@ class ParsedGameBoard
         $this->turn = $request->input('turn');
         $this->board = $request->input('board');
         $this->you = $request->input('you');
+        $this->snakes = $this->getSnakesFrom($this->board['snakes']);
     }
 
     public static function make(Request $request): self
@@ -61,13 +62,13 @@ class ParsedGameBoard
             if ($label === 'LEFT') {
                 $next_x = $you->head->x - 1;
                 $next_y = $you->head->y;
-            } elseif ($label === 'RIGHT') {
+            } else if ($label === 'RIGHT') {
                 $next_x = $you->head->x + 1;
                 $next_y = $you->head->y;
-            } elseif ($label === 'UP') {
+            } else if ($label === 'UP') {
                 $next_x = $you->head->x;
                 $next_y = $you->head->y + 1;
-            } elseif ($label === 'DOWN') {
+            } else if ($label === 'DOWN') {
                 $next_x = $you->head->x;
                 $next_y = $you->head->y - 1;
             }
@@ -81,6 +82,17 @@ class ParsedGameBoard
                     break;
                 }
             }
+
+            /* @var Point $body_pt */
+            foreach ($this->snakes as $snake) {
+                foreach ($snake->body as $body_pt) {
+                    if ($body_pt == $next_point) {
+                        $skip = true;
+                        break 2;
+                    }
+                }
+            }
+
             if ($skip) {
                 continue;
             }
@@ -97,7 +109,7 @@ class ParsedGameBoard
     {
         $keys = array_keys($list);
         shuffle($keys);
-        $random = array();
+        $random = [];
         foreach ($keys as $key) {
             $random[$key] = $list[$key];
         }
