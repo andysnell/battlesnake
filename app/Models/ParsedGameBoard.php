@@ -84,7 +84,7 @@ class ParsedGameBoard
             if ($skip) {
                 continue;
             }
-            // Check other snakes
+            $next_move = $direction;
         }
 
         if ($next_move) {
