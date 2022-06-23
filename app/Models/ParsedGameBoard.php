@@ -38,10 +38,18 @@ class ParsedGameBoard
 
         $directions = Direction::POOL;
 
-        if ($you->head->x === 0) { unset($directions["LEFT"]); }
-        if ($you->head->y === 0) { unset($directions["DOWN"]); }
-        if ($you->head->y === $this->board->height - 1) { unset($directions["UP"]); }
-        if ($you->head->x === $this->board->width - 1) { unset($directions["RIGHT"]); }
+        if ($you->head->x === 0) {
+            unset($directions["LEFT"]);
+        }
+        if ($you->head->y === 0) {
+            unset($directions["DOWN"]);
+        }
+        if ($you->head->y === $this->board->height - 1) {
+            unset($directions["UP"]);
+        }
+        if ($you->head->x === $this->board->width - 1) {
+            unset($directions["RIGHT"]);
+        }
 
         return $directions[array_rand($directions)];
     }
@@ -69,7 +77,7 @@ class ParsedGameBoard
             $this->you['id'],
             $this->you['name'],
             $this->you['health'],
-            $this->you['body'],
+            new Point($this->you['body']['x'], $this->you['body']['y']),
             $this->you['head'],
             $this->you['length']
         );
