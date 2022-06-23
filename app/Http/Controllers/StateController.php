@@ -23,7 +23,7 @@ class StateController extends Controller
         {
           "apiversion": "1",
           "author": "andysnell",
-          "color": "#888888",
+          "color": "#00FF00",
           "head": "default",
           "tail": "default",
           "version": "0.0.1-beta"
