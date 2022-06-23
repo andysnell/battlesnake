@@ -28,9 +28,9 @@ class MoveController extends Controller
         $next_move = ParsedGameBoard::make($request)->getNextMove();
 
         $this->logger->info('move decided', [
-            'move' => $next_move,
+            'move' => $next_move->value,
         ]);
 
-        return new JsonResponse(['move' => $next_move]);
+        return new JsonResponse(['move' => $next_move->value]);
     }
 }
