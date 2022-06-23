@@ -8,7 +8,7 @@ class Snake
         public string $id,
         public string $name,
         public int $health,
-        public Coordinate $head,
+        public Point $head,
         public array $body,
         public int $length
     ) {

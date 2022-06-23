@@ -18,18 +18,19 @@ class MoveController extends Controller
 
     public function __invoke(Request $request): JsonResponse
     {
-        $this->logger->info('moving', [
+        $this->logger->info('move requested', [
             'game' => $request->input('game'),
             'turn' => $request->input('turn'),
             'board' => $request->input('board'),
             'you' => $request->input('you'),
         ]);
 
+        $next_move = ParsedGameBoard::make($request)->getNextMove();
 
-        $parser = new ParsedGameBoard($request->getContent());
+        $this->logger->info('move decided', [
+            'move' => $next_move,
+        ]);
 
-        $board = $parser->getBoard();
-
-        return new JsonResponse(['move' => 'up']);
+        return new JsonResponse(['move' => $next_move]);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Ramsey\Collection\Collection;
+use Illuminate\Http\Request;
 
 class ParsedGameBoard
 {
@@ -13,38 +13,56 @@ class ParsedGameBoard
     public array $hazards;
     public array $snakes;
 
-    public $data;
+    public array $game;
+    public array $turn;
+    public array $board;
+    public array $you;
 
-    public function __construct(string $data)
+    public function __construct(Request $request)
     {
-        $this->data = json_decode($data, true);
+        $this->game = $request->input('game');
+            $this->turn = $request->input('turn');
+            $this->board = $request->input('board');
+            $this->you = $request->input('you');
     }
 
-    public function getBoard() : Board {
-        $board_data = $this->data["board"];
+    public static function make(Request $request): self
+    {
+        return new self($request);
+    }
+
+    public function getNextMove(): Direction
+    {
+        return Direction::random();
+    }
+
+    private function getBoard(): Board
+    {
+        $board_data = $this->board;
 
         return new Board(
             $board_data['height'],
             $board_data['width'],
-            collect($board_data['food'])->map(function($item,$key) {
-                return new Coordinate($item['x'], $item['y']);
+            collect($board_data['food'])->map(function ($item, $key) {
+                return new Point($item['x'], $item['y']);
             })->all(),
-            collect($board_data['hazards'])->map(function($item,$key) {
-                return new Coordinate($item['x'], $item['y']);
+            collect($board_data['hazards'])->map(function ($item, $key) {
+                return new Point($item['x'], $item['y']);
             })->all(),
             $this->getSnakesFrom($board_data['snakes']),
         );
     }
 
-    public function getSnakesFrom(array $snake_data) : array {
+    private function getSnakesFrom(array $snake_data): array
+    {
         return collect($snake_data)->map(function ($item, $key) {
             return new Snake(
                 $item['id'],
                 $item['name'],
                 $item['health'],
-                new Coordinate($item['head']['x'],$item['head']['y']),
-                collect($item['body'])->map(function ($body_coord, $key)  {
-                    return new Coordinate($body_coord['x'],$body_coord['y']);
+                new Point($item['head']['x'], $item['head']['y']),
+                collect($item['body'])->map(function ($body_coord, $key) {
+                    return new Point($body_coord['x'], $body_coord['y']);
                 })->all(),
                 $item['length'],
             );
