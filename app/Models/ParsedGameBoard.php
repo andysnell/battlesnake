@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Http\Request;
+use PhpParser\Node\Scalar\MagicConst\Dir;
 
 class ParsedGameBoard
 {
@@ -21,9 +22,9 @@ class ParsedGameBoard
     public function __construct(Request $request)
     {
         $this->game = $request->input('game');
-            $this->turn = $request->input('turn');
-            $this->board = $request->input('board');
-            $this->you = $request->input('you');
+        $this->turn = $request->input('turn');
+        $this->board = $request->input('board');
+        $this->you = $request->input('you');
     }
 
     public static function make(Request $request): self
@@ -33,9 +34,16 @@ class ParsedGameBoard
 
     public function getNextMove(): Direction
     {
-        return Direction::random();
+        $you = $this->createYou();
 
+        $directions = Direction::POOL;
 
+        if ($you->head->x === 0) { unset($directions["LEFT"]); }
+        if ($you->head->y === 0) { unset($directions["DOWN"]); }
+        if ($you->head->y === $this->board->height - 1) { unset($directions["UP"]); }
+        if ($you->head->x === $this->board->width - 1) { unset($directions["RIGHT"]); }
+
+        return $directions[array_rand($directions)];
     }
 
     private function getBoard(): Board
@@ -55,6 +63,18 @@ class ParsedGameBoard
         );
     }
 
+    private function createYou(): Snake
+    {
+        return new Snake(
+            $this->you['id'],
+            $this->you['name'],
+            $this->you['health'],
+            $this->you['body'],
+            $this->you['head'],
+            $this->you['length']
+        );
+    }
+
     private function getSnakesFrom(array $snake_data): array
     {
         return collect($snake_data)->map(function ($item, $key) {
@@ -70,6 +90,5 @@ class ParsedGameBoard
             );
         })->all();
     }
-
 }
 

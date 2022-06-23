@@ -11,15 +11,15 @@ enum Direction: string
     case LEFT = "left";
     case RIGHT = "right";
 
-    private const DIR = [
-        self::UP,
-        self::DOWN,
-        self::LEFT,
-        self::RIGHT,
+    public const POOL = [
+        "UP" => self::UP,
+        "DOWN" => self::DOWN,
+        "LEFT" => self::LEFT,
+        "RIGHT" => self::RIGHT,
     ];
 
     public static function random(): self
     {
-        return self::DIR[\random_int(0, 3)];
+        return self::POOL[\random_int(0, 3)];
     }
 }
