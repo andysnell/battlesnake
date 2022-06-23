@@ -77,8 +77,8 @@ class ParsedGameBoard
             $this->you['id'],
             $this->you['name'],
             $this->you['health'],
-            new Point($this->you['body']['x'], $this->you['body']['y']),
-            $this->you['head'],
+            new Point($this->you['head']['x'], $this->you['head']['y']),
+            [new Point($this->you['head']['x'], $this->you['head']['y'])],
             $this->you['length']
         );
     }
