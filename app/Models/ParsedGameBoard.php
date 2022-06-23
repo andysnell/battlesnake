@@ -51,7 +51,57 @@ class ParsedGameBoard
             unset($directions["RIGHT"]);
         }
 
+        $directions = $this->shuffle_directions($directions);
+        $next_move = null;
+
+        /* @var Direction $direction */
+        foreach ($directions as $label => $direction) {
+            $skip = false;
+
+            if ($label === 'LEFT') {
+                $next_x = $you->head->x - 1;
+                $next_y = $you->head->y;
+            } elseif ($label === 'RIGHT') {
+                $next_x = $you->head->x + 1;
+                $next_y = $you->head->y;
+            } elseif ($label === 'UP') {
+                $next_x = $you->head->x;
+                $next_y = $you->head->y + 1;
+            } elseif ($label === 'DOWN') {
+                $next_x = $you->head->x;
+                $next_y = $you->head->y - 1;
+            }
+            $next_point = new Point($next_x, $next_y);
+
+            // Check own body
+            /* @var Point $body_pt */
+            foreach ($you->body as $body_pt) {
+                if ($body_pt == $next_point) {
+                    $skip = true;
+                    break;
+                }
+            }
+            if ($skip) {
+                continue;
+            }
+            // Check other snakes
+        }
+
+        if ($next_move) {
+            return $next_move;
+        }
         return $directions[\array_rand($directions)];
+    }
+
+    private function shuffle_directions(array $list): array
+    {
+        $keys = array_keys($list);
+        shuffle($keys);
+        $random = array();
+        foreach ($keys as $key) {
+            $random[$key] = $list[$key];
+        }
+        return $random;
     }
 
     private function getBoard(): Board
@@ -78,7 +128,9 @@ class ParsedGameBoard
             $this->you['name'],
             $this->you['health'],
             new Point($this->you['head']['x'], $this->you['head']['y']),
-            [new Point($this->you['head']['x'], $this->you['head']['y'])],
+            collect($this->you['body'])->map(function ($body_coord, $key) {
+                return new Point($body_coord['x'], $body_coord['y']);
+            })->all(),
             $this->you['length']
         );
     }
@@ -99,4 +151,3 @@ class ParsedGameBoard
         })->all();
     }
 }
-

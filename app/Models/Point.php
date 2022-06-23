@@ -40,4 +40,3 @@ class Point
         return ($this->x * $end->y) - ($this->y * $end->x);
     }
 }
-
