@@ -74,23 +74,7 @@ class ParsedGameBoard
             }
             $next_point = new Point($next_x, $next_y);
 
-            // if food take it immediately
-            foreach ($this->board['food'] as $food) {
-                if ($food['x'] == $next_point->x
-                    && $food['y'] == $next_point->y
-                ) {
-                    return $direction;
-                }
-            }
 
-            // Check own body
-            /* @var Point $body_pt */
-            foreach ($you->body as $body_pt) {
-                if ($body_pt == $next_point) {
-                    $skip = true;
-                    break;
-                }
-            }
 
             /* @var Point $body_pt */
             foreach ($this->snakes as $snake) {
@@ -106,6 +90,15 @@ class ParsedGameBoard
                 continue;
             }
             $next_move = $direction;
+        }
+
+        // if food take it immediately
+        foreach ($this->board['food'] as $food) {
+            if ($food['x'] == $next_point->x
+                && $food['y'] == $next_point->y
+            ) {
+                return $direction;
+            }
         }
 
         if ($next_move) {
