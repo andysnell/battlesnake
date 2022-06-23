@@ -14,7 +14,7 @@ class ParsedGameBoard
     public array $snakes;
 
     public array $game;
-    public array $turn;
+    public int $turn;
     public array $board;
     public array $you;
 
@@ -34,6 +34,8 @@ class ParsedGameBoard
     public function getNextMove(): Direction
     {
         return Direction::random();
+
+
     }
 
     private function getBoard(): Board
