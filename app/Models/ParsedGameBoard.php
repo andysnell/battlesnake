@@ -44,14 +44,14 @@ class ParsedGameBoard
         if ($you->head->y === 0) {
             unset($directions["DOWN"]);
         }
-        if ($you->head->y === $this->board->height - 1) {
+        if ($you->head->y === $this->board['height'] - 1) {
             unset($directions["UP"]);
         }
-        if ($you->head->x === $this->board->width - 1) {
+        if ($you->head->x === $this->board['width'] - 1) {
             unset($directions["RIGHT"]);
         }
 
-        return $directions[array_rand($directions)];
+        return $directions[\array_rand($directions)];
     }
 
     private function getBoard(): Board
