@@ -74,6 +74,15 @@ class ParsedGameBoard
             }
             $next_point = new Point($next_x, $next_y);
 
+            // if food take it immediately
+            foreach ($this->board['food'] as $food) {
+                if ($food['x'] == $next_point->x
+                    && $food['y'] == $next_point->y
+                ) {
+                    return $direction;
+                }
+            }
+
             // Check own body
             /* @var Point $body_pt */
             foreach ($you->body as $body_pt) {
